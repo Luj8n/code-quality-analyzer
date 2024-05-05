@@ -27,12 +27,25 @@ public class Function {
         return count;
     }
 
+    public boolean isCamelCase() {
+        String word = name.getWord();
+        return word.matches("^[a-z][a-z0-9]*([A-Z][a-z0-9]+)*[A-Za-z0-9]?$");
+    }
+
     public WordToken getName() {
         return name;
     }
 
+    public List<Token> getParameters() {
+        return parameters;
+    }
+
     public List<Token> getInside() {
         return inside;
+    }
+
+    public Path getPath() {
+        return path;
     }
 
     @Override

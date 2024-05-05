@@ -52,7 +52,7 @@ public class JavaFile {
         List<Token> ts = tokenize();
         List<Function> functions = new ArrayList<>();
 
-        for (int i = 0; i < ts.size() - 1; i++) {
+        for (int i = 1; i < ts.size() - 1; i++) {
             int j = i;
             if (ts.get(j) instanceof WordToken functionName) {
                 String w = functionName.getWord();
@@ -61,45 +61,61 @@ public class JavaFile {
                     w.equals("do") || w.equals("switch") || w.equals("try") || w.equals("catch")) {
                     continue;
                 }
-                if (ts.get(j + 1) instanceof CharacterToken c && c.getCharacter() == '(') {
-                    j += 2;
-                    int paramStart = j;
-                    int counter = 1;
-                    while (counter != 0) {
-                        if (ts.get(j) instanceof CharacterToken x && x.getCharacter() == '(') {
-                            counter += 1;
-                        } else if (ts.get(j) instanceof CharacterToken x &&
-                            x.getCharacter() == ')') {
-                            counter -= 1;
-                        }
-
-                        j += 1;
+                if (ts.get(j - 1) instanceof WordToken x) {
+                    String p = x.getWord();
+                    // Ignore constructors
+                    if (p.equals("public") || p.equals("private") || p.equals("protected")) {
+                        continue;
                     }
+                    // Ignore this kind of syntax: `return new Builder() {...}`
+                    if (p.equals("new")) {
+                        continue;
+                    }
+                }
+                // Check if the previous character is a word or '>'
+                if (ts.get(j - 1) instanceof WordToken ||
+                    (ts.get(j - 1) instanceof CharacterToken c && c.getCharacter() == '>')) {
 
-                    int paramEnd = j - 2;
-
-                    if (ts.get(j) instanceof CharacterToken o && o.getCharacter() == '{') {
-                        j += 1;
-                        // Start of function
-                        int start = j;
-
-                        int counter2 = 1;
-                        while (counter2 != 0) {
-                            if (ts.get(j) instanceof CharacterToken x && x.getCharacter() == '{') {
-                                counter2 += 1;
+                    if (ts.get(j + 1) instanceof CharacterToken c && c.getCharacter() == '(') {
+                        j += 2;
+                        int paramStart = j;
+                        int counter = 1;
+                        while (counter != 0) {
+                            if (ts.get(j) instanceof CharacterToken x && x.getCharacter() == '(') {
+                                counter += 1;
                             } else if (ts.get(j) instanceof CharacterToken x &&
-                                x.getCharacter() == '}') {
-                                counter2 -= 1;
+                                x.getCharacter() == ')') {
+                                counter -= 1;
                             }
 
                             j += 1;
                         }
 
-                        int end = j - 2;
+                        int paramEnd = j - 2;
 
-                        functions.add(
-                            new Function(functionName, ts.subList(paramStart, paramEnd + 1),
-                                ts.subList(start, end + 1), path));
+                        if (ts.get(j) instanceof CharacterToken o && o.getCharacter() == '{') {
+                            j += 1;
+                            int functionStart = j;
+
+                            int counter2 = 1;
+                            while (counter2 != 0) {
+                                if (ts.get(j) instanceof CharacterToken x &&
+                                    x.getCharacter() == '{') {
+                                    counter2 += 1;
+                                } else if (ts.get(j) instanceof CharacterToken x &&
+                                    x.getCharacter() == '}') {
+                                    counter2 -= 1;
+                                }
+
+                                j += 1;
+                            }
+
+                            int functionEnd = j - 2;
+
+                            functions.add(
+                                new Function(functionName, ts.subList(paramStart, paramEnd + 1),
+                                    ts.subList(functionStart, functionEnd + 1), path));
+                        }
                     }
                 }
             }
