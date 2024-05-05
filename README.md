@@ -74,7 +74,7 @@ cd code-quality-analyzer
 
 - The application recursively traverses the specified directory to find Java files.
 - It extracts functions from each Java file by:
-  - Tokenizing the Java code using `StringTokenizer`.
+  - Tokenizing the Java code using `StreamTokenizer`.
   - Iteratively going through the tokens and checking if the current token can be a function name (also checks the surrounding tokens).
   - Determining where the function body begins and ends.
 - Calculates the complexity of each function.
