@@ -46,7 +46,7 @@ public class Main {
         functions.sort(Comparator.comparingInt(Function::calculateComplexity).reversed());
 
         // Print the 3 most complex methods
-        System.out.println("Highest complexity scores:");
+        System.out.println("\nHighest complexity scores:");
         for (int i = 0; i < 3 && i < functions.size(); i++) {
             Function function = functions.get(i);
             System.out.println(
@@ -62,7 +62,7 @@ public class Main {
         }
 
         double percentageNotCamelCase = 100.0 * notCamelCase / functions.size();
-        System.out.printf("Not camelcase: %.2f%%", percentageNotCamelCase);
+        System.out.printf("\nNot camelcase: %.2f%%\n", percentageNotCamelCase);
     }
 
     /**
