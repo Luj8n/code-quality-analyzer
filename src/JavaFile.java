@@ -11,7 +11,15 @@ import tokens.NumberToken;
 import tokens.Token;
 import tokens.WordToken;
 
+/**
+ * Represents a Java file for tokenization and function extraction.
+ */
 public record JavaFile(Path filePath) {
+    /**
+     * Tokenizes the Java file.
+     *
+     * @return A list of tokens representing the contents of the file.
+     */
     private List<Token> tokenize() {
         List<Token> tokens = new ArrayList<>();
         try {
@@ -47,6 +55,11 @@ public record JavaFile(Path filePath) {
         }
     }
 
+    /**
+     * Extracts functions from the Java file.
+     *
+     * @return A list of functions parsed from the file.
+     */
     public List<Function> getFunctions() {
         List<Token> ts = tokenize();
         List<Function> functions = new ArrayList<>();
@@ -80,11 +93,24 @@ public record JavaFile(Path filePath) {
         return functions;
     }
 
+    /**
+     * Checks if the given function name is a reserved keyword.
+     *
+     * @param functionName The name of the function.
+     * @return True if the function name is a reserved keyword, otherwise false.
+     */
     private boolean isReservedFunctionName(WordToken functionName) {
         String word = functionName.getWord();
         return Set.of("if", "else", "for", "while", "do", "switch", "try", "catch").contains(word);
     }
 
+    /**
+     * Checks if the given token represents a constructor.
+     *
+     * @param tokens The list of tokens in the Java file.
+     * @param index  The index of the token representing the function name.
+     * @return True if the token represents a constructor, otherwise false.
+     */
     private boolean isConstructor(List<Token> tokens, int index) {
         if (index > 0 && tokens.get(index - 1) instanceof WordToken prevToken) {
             return Set.of("public", "private", "protected").contains(prevToken.getWord());
@@ -92,6 +118,13 @@ public record JavaFile(Path filePath) {
         return false;
     }
 
+    /**
+     * Checks if the given token represents an anonymous class instantiation.
+     *
+     * @param tokens The list of tokens in the Java file.
+     * @param index  The index of the token representing the function name.
+     * @return True if the token represents an anonymous class instantiation, otherwise false.
+     */
     private boolean isAnonymousClass(List<Token> tokens, int index) {
         if (index > 0 && tokens.get(index - 1) instanceof WordToken prevToken) {
             return "new".equals(prevToken.getWord());
@@ -99,23 +132,54 @@ public record JavaFile(Path filePath) {
         return false;
     }
 
+    /**
+     * Checks if the function at the given index has a return type.
+     *
+     * @param tokens The list of tokens in the Java file.
+     * @param index  The index of the token representing the function name.
+     * @return True if the function has a return type, otherwise false.
+     */
     private boolean hasReturnType(List<Token> tokens, int index) {
         if (index <= 0) {
             return false;
         }
-        // Check if the previous character is a word or '>'
-        return tokens.get(index - 1) instanceof WordToken ||
+        // Check if the previous character is a word (which is not 'record') or '>' (end of generic)
+        return (tokens.get(index - 1) instanceof WordToken prevWord &&
+            !"record".equals(prevWord.getWord())) ||
             (tokens.get(index - 1) instanceof CharacterToken c && c.getCharacter() == '>');
     }
 
+    /**
+     * Finds the range of parameters for a function.
+     *
+     * @param tokens The list of tokens in the Java file.
+     * @param index  The index of the token representing the function name.
+     * @return An array containing the start and end indices of the parameter range, or null if not found.
+     */
     private int[] findParameterRange(List<Token> tokens, int index) {
         return findBracketRange(tokens, index, '(', ')');
     }
 
+    /**
+     * Finds the range of the function body.
+     *
+     * @param tokens The list of tokens in the Java file.
+     * @param index  The index of the token just before the function body - ')'.
+     * @return An array containing the start and end indices of the function body range, or null if not found.
+     */
     private int[] findFunctionBodyRange(List<Token> tokens, int index) {
         return findBracketRange(tokens, index, '{', '}');
     }
 
+    /**
+     * Finds the range of a bracketed block.
+     *
+     * @param tokens The list of tokens in the Java file.
+     * @param index  The index of the token before the one opening bracket token.
+     * @param open   The opening bracket character.
+     * @param close  The closing bracket character.
+     * @return An array containing the start and end indices of the bracketed block, or null if not found.
+     */
     private int[] findBracketRange(List<Token> tokens, int index, char open, char close) {
         boolean nextIsOpen =
             tokens.get(index + 1) instanceof CharacterToken c && c.getCharacter() == open;
