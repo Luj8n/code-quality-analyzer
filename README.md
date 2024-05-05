@@ -84,4 +84,6 @@ cd code-quality-analyzer
 
 ## To improve
 
-Currently the application uses many `if` statements to check if a token is a Java function name. However, there might be some edge cases where it fails to detect a function or thinks that a non-function (like a constructor or a record) is a function. The solution would be to construct an AST (abstract syntax tree).
+- Currently the application uses many `if` statements to check if a token is a Java function name. However, there might be some edge cases where it fails to detect a function or thinks that a non-function (like a constructor or a record) is a function. The solution would be to construct an AST (abstract syntax tree).
+
+- Tests should be written to ensure that function detection is correct, since it has many edge cases.
