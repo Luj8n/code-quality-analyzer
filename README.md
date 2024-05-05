@@ -60,12 +60,12 @@ cd code-quality-analyzer
    Output:
 
    ```
-   21 functions found
+   24 functions found
 
    Highest complexity scores:
+   Score = 6, function = findBracketRange(JavaFile.java:185)
    Score = 5, function = getFunctions(JavaFile.java:63)
    Score = 4, function = analyzeFunctions(Main.java:37)
-   Score = 3, function = getJavaFiles(Main.java:90)
 
    Not camelcase: 0.00%
    ```

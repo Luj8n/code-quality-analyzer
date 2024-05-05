@@ -144,9 +144,11 @@ public record JavaFile(Path filePath) {
             return false;
         }
         // Check if the previous character is a word (which is not 'record') or '>' (end of generic)
+        // or ']' end of array
         return (tokens.get(index - 1) instanceof WordToken prevWord &&
             !"record".equals(prevWord.getWord())) ||
-            (tokens.get(index - 1) instanceof CharacterToken c && c.getCharacter() == '>');
+            (tokens.get(index - 1) instanceof CharacterToken c &&
+                (c.getCharacter() == '>' || c.getCharacter() == ']'));
     }
 
     /**
