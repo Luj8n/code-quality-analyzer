@@ -1,4 +1,4 @@
-# Code Quality Evaluator
+# Code Quality Analyzer
 
 This application analyzes Java files within a specified directory, reporting function complexity and basic code style checks.
 
