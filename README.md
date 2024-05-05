@@ -67,7 +67,7 @@ cd code-quality-analyzer
    Score = 5, function = getFunctions(JavaFile.java:63)
    Score = 4, function = analyzeFunctions(Main.java:37)
 
-   Not camelcase: 0.00%
+   Not camelCase: 0.00%
    ```
 
 ## Approach

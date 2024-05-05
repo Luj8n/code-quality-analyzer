@@ -62,7 +62,7 @@ public class Main {
         }
 
         double percentageNotCamelCase = 100.0 * notCamelCase / functions.size();
-        System.out.printf("\nNot camelcase: %.2f%%\n", percentageNotCamelCase);
+        System.out.printf("\nNot camelCase: %.2f%%\n", percentageNotCamelCase);
     }
 
     /**
