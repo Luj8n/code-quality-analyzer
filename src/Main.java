@@ -3,6 +3,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -17,9 +18,25 @@ public class Main {
         }
         String directoryName = args[0];
         List<JavaFile> files = getJavaFiles(Path.of(directoryName));
-        List<Token> ts = files.getFirst().tokenize();
-        double x_1 = 1.2;
-        System.out.println(ts);
+
+        analyze(files);
+    }
+
+    private static void analyze(List<JavaFile> files) {
+        List<Function> functions = new ArrayList<>();
+
+        for (JavaFile file : files) {
+            functions.addAll(file.getFunctions());
+        }
+
+        functions.sort(Comparator.comparingInt(Function::calculateComplexity).reversed());
+
+        System.out.println("Highest complexity scores:");
+        for (int i = 0; i < 3 && i < functions.size(); i++) {
+            Function function = functions.get(i);
+            System.out.println(
+                "Score = " + function.calculateComplexity() + ", function = " + function);
+        }
     }
 
     private static List<JavaFile> getJavaFiles(Path directory) {
