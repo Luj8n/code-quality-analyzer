@@ -3,8 +3,12 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import nodes.Function;
+import tokens.CharacterToken;
+import tokens.NumberToken;
+import tokens.Token;
+import tokens.WordToken;
 
 public class JavaFile {
     private final Path path;

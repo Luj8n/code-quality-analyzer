@@ -1,5 +1,9 @@
+package nodes;
+
 import java.nio.file.Path;
 import java.util.List;
+import tokens.Token;
+import tokens.WordToken;
 
 public class Function {
     private final WordToken name;

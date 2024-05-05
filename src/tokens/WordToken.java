@@ -1,3 +1,5 @@
+package tokens;
+
 public class WordToken extends Token {
     private final String word;
 

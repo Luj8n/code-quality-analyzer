@@ -1,3 +1,5 @@
+package tokens;
+
 public abstract class Token {
     protected int lineNumber;
 

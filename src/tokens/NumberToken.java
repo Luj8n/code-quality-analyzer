@@ -1,3 +1,5 @@
+package tokens;
+
 public class NumberToken extends Token {
     private final double number;
 

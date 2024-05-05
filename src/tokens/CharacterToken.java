@@ -1,3 +1,5 @@
+package tokens;
+
 public class CharacterToken extends Token {
     private final char character;
 
